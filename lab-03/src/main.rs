@@ -84,6 +84,83 @@ fn multiply_matrices(matrix1: &Vec<Vec<f64>>, matrix2: &Vec<Vec<f64>>) -> Vec<Ve
     result
 }
 
+struct Matrix {
+    data: Vec<Vec<f64>>
+}
+
+impl Matrix {
+    pub fn new(data: Vec<Vec<f64>>) -> Result<Matrix, ()> {
+        if data.len() == 0 {
+            println!("The matrix must contain at least one row.");
+            return Err(());
+        } else if data[0].len() == 0 {
+            println!("The matrix must contain at least one column.");
+            return Err(());
+        }
+
+        let col_length = data[0].len();
+
+        for col in data.clone() {
+            if col.len() != col_length {
+                println!("The matrix's columns must be of the same size");
+                return Err(());
+            }
+        }
+
+        Ok(Matrix {
+            data
+        })
+    }
+
+    pub fn print(&self) {
+        for row in &self.data {
+            println!("{:?}", row);
+        }
+    }
+
+    pub fn multiply_by_const(&mut self, x: f64) -> Matrix {
+        let mut matrix = Matrix::new(self.data.clone()).unwrap();
+
+        for i in 0..self.data.len() {
+            for j in 0..self.data[i].len() {
+                matrix.data[i][j] *= x;
+            }
+        }
+
+        matrix
+    }
+
+    fn get_size(&self) -> (usize, usize) {
+        (self.data.len(), self.data[0].len())
+    }
+
+    pub fn add(&mut self, other: Matrix) -> Result<Matrix, ()> {
+        if self.get_size() != other.get_size() {
+            println!("The matrices must be of the same size");
+            return Err(());
+        }
+
+        let mut matrix = Matrix::new(self.data.clone())?;
+
+        for i in 0..self.data.len() {
+            for j in 0..self.data[i].len() {
+                matrix.data[i][j] += other.data[i][j];
+            }
+        }
+
+        Ok(matrix)
+    }
+
+    pub fn multiply(&mut self, other: Matrix) -> Result<Matrix, ()> {
+        if self.get_size() != other.get_size() {
+            println!("The matrices must be of the same size");
+            return Err(());
+        }
+
+        Ok(Matrix::new(multiply_matrices(&self.data, &other.data))?)
+    }
+}
+
 fn main() {
     let vec = vec![1.0, 2.0, 5.0];
     println!("Zad 1:");
@@ -101,14 +178,26 @@ fn main() {
     println!("Metryka rzeki: {}", metryka_rzeki(p, q));
     println!("Metryka kolejowa: {}", metryka_kolejowa(p, q));
 
-    let matrix = vec![vec![2.0, 1.0], vec![3.0, 4.0]];
+    println!();
+
+    let matrix = vec![
+        vec![2.0, 1.0],
+        vec![3.0, 4.0]
+    ];
+
     println!("Zad 3:");
     println!("{:?}", matrix);
     println!("{}", matrix_frobenius(&matrix));
     println!("{}", matrix_manhattan(&matrix));
     println!("{}", matrix_max(&matrix));
 
-    let matrix2 = vec![vec![2.0, 2.0], vec![4.0, 2.0]];
+    println!();
+
+    let matrix2 = vec![
+        vec![2.0, 2.0],
+        vec![4.0, 2.0]
+    ];
+
     println!("Zad 4:");
     if check_matrices(&matrix, &matrix2) {
         let matrix3 = multiply_matrices(&matrix, &matrix2);
@@ -116,4 +205,40 @@ fn main() {
     } else {
         println!("Nie można pomnożyć macierzy o nierównych rozmiarach")
     }
+
+    println!();
+
+    println!("Zad 5:");
+    let mut matrix = Matrix::new(vec![
+        vec![2.0, 2.0],
+        vec![1.0, 4.0]
+    ]).unwrap();
+    let matrix2 = Matrix::new(vec![
+        vec![1.0, 2.0],
+        vec![4.0, 2.0]
+    ]).unwrap();
+
+    println!("Matrix 1:");
+    matrix.print();
+    println!();
+
+    println!("Matrix 2:");
+    matrix2.print();
+    println!();
+
+    let ones_matrix = Matrix::new(vec![
+        vec![1.0, 1.0],
+        vec![1.0, 1.0]
+    ]).unwrap();
+
+    let result = matrix.add(ones_matrix).unwrap();
+    result.print();
+    println!();
+
+    let result = matrix.multiply_by_const(2.0);
+    result.print();
+    println!();
+
+    let result = matrix.multiply(matrix2).unwrap();
+    result.print();
 }
