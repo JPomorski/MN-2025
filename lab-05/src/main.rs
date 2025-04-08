@@ -227,13 +227,13 @@ fn invert_gauss_jordan(matrix: &Matrix) -> Option<Matrix> {
 
 fn print(matrix: &Matrix) {
     for row in matrix {
-        println!("{:.1?}", row);
+        println!("{:>5.1?}", row);
     }
 }
 
 fn print_round(matrix: &Matrix) {
     for row in matrix {
-        println!("{:.1?}", row.iter().map(|x| x.round().abs()).collect::<Vec<f64>>());
+        println!("{:>5.1?}", row.iter().map(|x| x.round().abs()).collect::<Vec<f64>>());
     }
 }
 
@@ -320,7 +320,7 @@ fn measure_zad_01(a: &Matrix, b: &Matrix) {
     let start = std::time::Instant::now();
 
     let inv_gauss = invert_gauss_jordan(&a).unwrap();
-    let result = multiply(&inv_lap, &b);
+    let result = multiply(&inv_gauss, &b);
 
     let elapsed = start.elapsed().as_secs_f64();
 
