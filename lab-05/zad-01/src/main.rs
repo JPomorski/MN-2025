@@ -227,13 +227,13 @@ fn invert_gauss_jordan(matrix: &Matrix) -> Option<Matrix> {
 
 fn print(matrix: &Matrix) {
     for row in matrix {
-        println!("{:?}", row);
+        println!("{:.1?}", row);
     }
 }
 
 fn print_round(matrix: &Matrix) {
     for row in matrix {
-        println!("{:?}", row.iter().map(|x| x.round().abs()).collect::<Vec<f64>>());
+        println!("{:.1?}", row.iter().map(|x| x.round().abs()).collect::<Vec<f64>>());
     }
 }
 
@@ -241,37 +241,140 @@ fn doolittle(matrix: &Matrix) -> (Matrix, Matrix) {
     let n = get_square_matrix_size(&matrix);
 
     let mut vec_u = vec![vec![0.0; n]; n];
-    let mut vec_i = vec![vec![0.0; n]; n];
+    let mut vec_l = vec![vec![0.0; n]; n];
 
     for i in 0..3 {
-        vec_u[i][i] = 1.0
+        vec_l[i][i] = 1.0
     }
 
     for i in 0..n {
-        for j in (i + 1)..n {
+        for j in i..n {
             let mut sum_u = 0.0;
-            let mut sum_i = 0.0;
+            let mut sum_l = 0.0;
 
-            if i > 0 {
-                for k in 1..(i - 1) {
-                    sum_u += vec_i[i][k] * vec_u[k][j];
-                    sum_i += vec_i[j][k] * vec_u[k][i];
-                }
+            for k in 0..i {
+                sum_u += vec_l[i][k] * vec_u[k][j];
+                sum_l += vec_l[j][k] * vec_u[k][i];
             }
 
             vec_u[i][j] = matrix[i][j] - sum_u;
-            vec_i[j][i] = (matrix[j][i] - sum_i) / vec_u[i][i]
+            vec_l[j][i] = (matrix[j][i] - sum_l) / vec_u[i][i];
         }
     }
 
-    (vec_u, vec_i)
+    (vec_u, vec_l)
+}
+
+fn solve_linear_equation(l_matrix: &Matrix, u_matrix: &Matrix, b: &Matrix) -> Matrix {
+    let n = get_square_matrix_size(l_matrix);
+    let mut y = vec![vec![0.0]; n];
+
+    for i in 0..n {
+        let mut sum = 0.0;
+
+        for j in 0..i {
+            sum += l_matrix[i][j] * y[j][0]
+        }
+
+        y[i][0] = sum * -1.0 + b[i][0]
+    }
+
+    let mut x = vec![vec![0.0]; n];
+
+    for i in (0..n).rev() {
+        let mut sum = 0.0;
+
+        for j in ((i + 1)..n).rev() {
+            sum += u_matrix[i][j] * x[j][0]
+        }
+
+        x[i][0] = (sum * -1.0 + y[i][0]) / u_matrix[i][i];
+    }
+
+    x
+}
+
+fn measure_zad_01(a: &Matrix, b: &Matrix) {
+    let start = std::time::Instant::now();
+
+    let inv_lap = invert_laplacian(&a).unwrap();
+    let result = multiply(&inv_lap, &b);
+
+    let elapsed = start.elapsed().as_secs_f64();
+
+    println!("Macierz wejściowa:");
+    print(&a);
+    println!(" ");
+
+    println!("Macierz odwrotna:");
+    print(&inv_lap);
+    println!(" ");
+
+    println!("Wynik:");
+    print(&result);
+    println!(" ");
+
+    println!("Elapsed (laplace): {}", elapsed);
+    println!(" ");
+
+    let start = std::time::Instant::now();
+
+    let inv_gauss = invert_gauss_jordan(&a).unwrap();
+    let result = multiply(&inv_lap, &b);
+
+    let elapsed = start.elapsed().as_secs_f64();
+
+    println!("Macierz wejściowa:");
+    print(&a);
+    println!(" ");
+
+    println!("Macierz odwrotna:");
+    print(&inv_gauss);
+    println!(" ");
+
+    println!("Wynik:");
+    print(&result);
+    println!(" ");
+
+    println!("Elapsed (gauss): {}", elapsed);
+    println!(" ");
+}
+
+fn measure_zad_02(a: &Matrix, b: &Matrix) {
+    let start = std::time::Instant::now();
+
+    let (u, l) = doolittle(&a);
+    let result = solve_linear_equation(&l, &u, &b);
+
+    let elapsed = start.elapsed().as_secs_f64();
+
+    let a = multiply(&l, &u);
+
+    println!("Macierz L:");
+    print(&l);
+    println!(" ");
+
+    println!("Macierz U:");
+    print(&u);
+    println!(" ");
+
+    println!("Macierz L * U:");
+    print(&a);
+    println!(" ");
+
+    println!("Macierz wejściowa:");
+    print(&a);
+    println!(" ");
+
+    println!("Wynik:");
+    print(&result);
+    println!(" ");
+
+    println!("Elapsed (LU): {}", elapsed);
+    println!(" ");
 }
 
 fn main() {
-
-    let test = vec![vec![0.0; 5]; 3];
-    print(&test);
-
     let a1 = vec![
         vec![1.0, 2.0, 1.0],
         vec![3.0, -7.0, 2.0],
@@ -283,30 +386,6 @@ fn main() {
         vec![61.0],
         vec![-9.0]
     ];
-
-    // let start = std::time::Instant::now();
-    //
-    // let inv_lap = invert_laplacian(&a1).unwrap();
-    // let result = multiply(&inv_lap, &b1);
-    //
-    // let elapsed = start.elapsed().as_secs_f64();
-    //
-    // print(&inv_lap);
-    // print(&result);
-    // println!("Elapsed (laplace): {}", elapsed);
-    //
-    // let start = std::time::Instant::now();
-    //
-    // let inv_gauss = invert_gauss_jordan(&a1).unwrap();
-    // let result = multiply(&inv_lap, &b1);
-    //
-    // let elapsed = start.elapsed().as_secs_f64();
-    //
-    // print(&inv_gauss);
-    // print(&result);
-    // println!("Elapsed (gauss): {}", elapsed);
-    //
-    // println!("\n");
 
     let a2 = vec![
         vec![11.0, -5.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
@@ -329,30 +408,6 @@ fn main() {
         vec![0.0],
         vec![0.0],
     ];
-
-    // let start = std::time::Instant::now();
-    //
-    // let inv_lap = invert_laplacian(&a2).unwrap();
-    // let result = multiply(&inv_lap, &b2);
-    //
-    // let elapsed = start.elapsed().as_secs_f64();
-    //
-    // print(&inv_lap);
-    // print(&result);
-    // println!("Elapsed (laplace): {}", elapsed);
-    //
-    // let start = std::time::Instant::now();
-    //
-    // let inv_gauss = invert_gauss_jordan(&a2).unwrap();
-    // let result = multiply(&inv_lap, &b2);
-    //
-    // let elapsed = start.elapsed().as_secs_f64();
-    //
-    // print(&inv_gauss);
-    // print(&result);
-    // println!("Elapsed (gauss): {}", elapsed);
-    //
-    // println!("\n");
 
     let a3 = vec![
         vec![1.0, 6.0, 3.0, 8.0, 7.0, 6.0, 9.0, 4.0, 7.0, 3.0],
@@ -380,70 +435,17 @@ fn main() {
         vec![2.0],
     ];
 
-    // let start = std::time::Instant::now();
-    //
-    // let inv_lap = invert_laplacian(&a3).unwrap();
-    // let result = multiply(&inv_lap, &b3);
-    //
-    // let elapsed = start.elapsed().as_secs_f64();
-    //
-    // print(&inv_lap);
-    // print(&result);
-    // println!("Elapsed (laplace): {}", elapsed);
-    //
-    // let start = std::time::Instant::now();
-    //
-    // let inv_gauss = invert_gauss_jordan(&a3).unwrap();
-    // let result = multiply(&inv_lap, &b3);
-    //
-    // let elapsed = start.elapsed().as_secs_f64();
-    //
-    // print(&inv_gauss);
-    // print(&result);
-    // println!("Elapsed (gauss): {}", elapsed);
+    println!("Zadanie 1:");
+    println!();
 
-    let start = std::time::Instant::now();
+    measure_zad_01(&a1, &b1);
+    measure_zad_01(&a2, &b2);
+    measure_zad_01(&a3, &b3);
 
-    let (u, l) = doolittle(&a1);
-    let result = multiply(&l, &u);
+    println!("Zadanie 2:");
+    println!();
 
-    let elapsed = start.elapsed().as_secs_f64();
-
-    print(&l);
-    println!(" ");
-    print(&u);
-    println!(" ");
-    print(&result);
-    println!(" ");
-    println!("Elapsed (a1): {}", elapsed);
-
-    let start = std::time::Instant::now();
-
-    let (u, l) = doolittle(&a2);
-    let result = multiply(&l, &u);
-
-    let elapsed = start.elapsed().as_secs_f64();
-
-    print(&l);
-    println!(" ");
-    print(&u);
-    println!(" ");
-    print(&result);
-    println!(" ");
-    println!("Elapsed: {}", elapsed);
-
-    let start = std::time::Instant::now();
-
-    let (u, l) = doolittle(&a3);
-    let result = multiply(&l, &u);
-
-    let elapsed = start.elapsed().as_secs_f64();
-
-    print(&l);
-    println!(" ");
-    print(&u);
-    println!(" ");
-    print(&result);
-    println!(" ");
-    println!("Elapsed: {}", elapsed);
+    measure_zad_02(&a1, &b1);
+    measure_zad_02(&a2, &b2);
+    measure_zad_02(&a3, &b3);
 }
