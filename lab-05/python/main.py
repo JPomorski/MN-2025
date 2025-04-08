@@ -217,7 +217,7 @@ def doolittle(matrix):
             vec_u[i][j] = matrix[i][j] - sum_u
             vec_l[j][i] = (matrix[j][i] - sum_l) / vec_u[i][i]
             
-    return vec_u, vec_l
+    return vec_l, vec_u
 
 
 def solve_linear_equation(l_matrix, u_matrix, b):
@@ -265,7 +265,7 @@ def measure_zad_01(a, b):
     print_matrix(result)
     print()
 
-    print(f"Elapsed (laplace): {elapsed:f}")
+    print(f"Elapsed (Laplace): {elapsed:f}")
     print()
     
     start = time.perf_counter()
@@ -287,14 +287,14 @@ def measure_zad_01(a, b):
     print_matrix(result)
     print()
 
-    print(f"Elapsed (gauss): {elapsed:f}")
+    print(f"Elapsed (Gauss): {elapsed:f}")
     print()
     
     
 def measure_zad_02(a, b):
     start = time.perf_counter()
     
-    u, l = doolittle(a)
+    l, u = doolittle(a)
     result = solve_linear_equation(l, u, b)
     
     elapsed = time.perf_counter() - start

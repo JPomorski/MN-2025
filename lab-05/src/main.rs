@@ -262,7 +262,7 @@ fn doolittle(matrix: &Matrix) -> (Matrix, Matrix) {
         }
     }
 
-    (vec_u, vec_l)
+    (vec_l, vec_u)
 }
 
 fn solve_linear_equation(l_matrix: &Matrix, u_matrix: &Matrix, b: &Matrix) -> Matrix {
@@ -314,7 +314,7 @@ fn measure_zad_01(a: &Matrix, b: &Matrix) {
     print(&result);
     println!(" ");
 
-    println!("Elapsed (laplace): {}", elapsed);
+    println!("Elapsed (Laplace): {}", elapsed);
     println!(" ");
 
     let start = std::time::Instant::now();
@@ -336,14 +336,14 @@ fn measure_zad_01(a: &Matrix, b: &Matrix) {
     print(&result);
     println!(" ");
 
-    println!("Elapsed (gauss): {}", elapsed);
+    println!("Elapsed (Gauss): {}", elapsed);
     println!(" ");
 }
 
 fn measure_zad_02(a: &Matrix, b: &Matrix) {
     let start = std::time::Instant::now();
 
-    let (u, l) = doolittle(&a);
+    let (l, u) = doolittle(&a);
     let result = solve_linear_equation(&l, &u, &b);
 
     let elapsed = start.elapsed().as_secs_f64();
