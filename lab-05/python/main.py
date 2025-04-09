@@ -1,4 +1,5 @@
 import time
+import math
 
 
 def is_matrix_square(matrix):
@@ -245,6 +246,78 @@ def solve_linear_equation(l_matrix, u_matrix, b):
     return x
 
 
+def cholesky(matrix):
+    n = get_square_matrix_size(matrix)
+
+    l_matrix = [[0.0] * n for _ in range(n)]
+
+    for i in range(n):
+        sum_diag = 0.0
+
+        for k in range(i):
+            sum_diag += math.pow(l_matrix[i][k], 2)
+
+        l_matrix[i][i] = math.sqrt(matrix[i][i] - sum_diag)
+
+        for j in range(i + 1, n):
+            sum_other = 0.0
+
+            for k in range(i):
+                sum_other += l_matrix[j][k] * l_matrix[i][k]
+
+            l_matrix[j][i] = (1 / l_matrix[i][i]) * (matrix[j][i] - sum_other)
+
+    return l_matrix
+
+
+def solve_cholesky(l_matrix, b):
+    n = get_square_matrix_size(l_matrix)
+    y = [[0.0] for _ in range(n)]
+
+    for i in range(n):
+        sum = 0.0
+        for j in range(i):
+            sum += l_matrix[i][j] * y[j][0]
+
+        y[i][0] = (b[i][0] - sum) / l_matrix[i][i]
+
+    lt = transpose(l_matrix)
+    x = [[0.0] for _ in range(n)]
+
+    for i in range(n - 1, -1, -1):
+        sum = 0.0
+        for j in range(i + 1, n):
+            sum += lt[i][j] * x[j][0]
+
+        x[i][0] = (y[i][0] - sum) / lt[i][i]
+
+    return x
+
+
+def solve_gauss(a, b):
+    n = get_square_matrix_size(a)
+    a_matrix = [row[:] for row in a]
+    b_matrix = [row[:] for row in b]
+
+    for k in range(n - 1):
+        for i in range(k + 1, n):
+            for j in range(k + 1, n):
+                a_matrix[i][j] = a_matrix[i][j] - a_matrix[i][k] / a_matrix[k][k] * a_matrix[k][j]
+
+            b_matrix[i][0] = b_matrix[i][0] - a_matrix[i][k] / a_matrix[k][k] * b_matrix[k][0]
+
+    x = [[0.0] for _ in range(n)]
+
+    for i in range(n - 1, -1, -1):
+        sum = 0.0
+        for j in range(i + 1, n):
+            sum += a_matrix[i][j] * x[j][0]
+
+        x[i][0] = (b_matrix[i][0] - sum) / a_matrix[i][i]
+
+    return x
+
+
 def measure_zad_01(a, b):
     start = time.perf_counter()
     
@@ -323,6 +396,53 @@ def measure_zad_02(a, b):
 
     print(f"Elapsed (LU): {elapsed:f}")
     print(" ")
+
+
+def measure_zad_03(a, b):
+    start = time.perf_counter()
+
+    l = cholesky(a)
+    result = solve_cholesky(l, b)
+
+    elapsed = time.perf_counter() - start
+
+    print("Macierz wejściowa:")
+    print_matrix(a)
+    print(" ")
+
+    print("Macierz L:")
+    print_matrix(l)
+    print(" ")
+
+    print("Macierz LT:")
+    print_matrix(transpose(l))
+    print(" ")
+
+    print("Wynik:")
+    print_matrix(result)
+    print(" ")
+
+    print(f"Elapsed (Cholesky): {elapsed:f}")
+    print(" ")
+
+
+def measure_zad_04(a, b):
+    start = time.perf_counter()
+
+    result = solve_gauss(a, b)
+
+    elapsed = time.perf_counter() - start
+
+    print("Macierz wejściowa:")
+    print_matrix(a)
+    print(" ")
+
+    print("Wynik:")
+    print_matrix(result)
+    print(" ")
+
+    print(f"Elapsed (Gauss): {elapsed:f}")
+    print(" ")
     
 
 a1 = [
@@ -398,3 +518,26 @@ print()
 measure_zad_02(a1, b1)
 measure_zad_02(a2, b2)
 measure_zad_02(a3, b3)
+
+print("Zadanie 3:")
+print()
+
+a4 = [
+    [4.0, 2.0],
+    [2.0, 3.0]
+]
+
+b4 = [
+    [10.0],
+    [8.0]
+]
+
+measure_zad_03(a2, b2)
+measure_zad_03(a4, b4)
+
+print("Zadanie 4:")
+print()
+
+measure_zad_04(a1, b1)
+measure_zad_04(a2, b2)
+measure_zad_04(a3, b3)
