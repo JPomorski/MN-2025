@@ -301,10 +301,12 @@ def solve_gauss(a, b):
 
     for k in range(n - 1):
         for i in range(k + 1, n):
-            for j in range(k + 1, n):
-                a_matrix[i][j] = a_matrix[i][j] - a_matrix[i][k] / a_matrix[k][k] * a_matrix[k][j]
+            factor = a_matrix[i][k] / a_matrix[k][k]
 
-            b_matrix[i][0] = b_matrix[i][0] - a_matrix[i][k] / a_matrix[k][k] * b_matrix[k][0]
+            for j in range(k + 1, n):
+                a_matrix[i][j] = a_matrix[i][j] - factor * a_matrix[k][j]
+
+            b_matrix[i][0] = b_matrix[i][0] - factor * b_matrix[k][0]
 
     x = [[0.0] for _ in range(n)]
 
