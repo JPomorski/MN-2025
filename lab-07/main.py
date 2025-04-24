@@ -82,25 +82,35 @@ def newton_method(f, df, ddf, a, b, tolerance=1e-6, iterations=100):
     return x
 
 
-def sieczna(f, a, b, tolerance=1e-6, iterations=100):
-    x_prev = a
-    x_curr = b
+def sieczna(f, df, ddf, a, b, tolerance=1e-6, iterations=100):
+    if f(a) * f(b) >= 0:
+        print("Oba punkty są tego samego znaku, nie można zagwarantować miejsca zerowego")
+        return
 
-    for i in range(iterations):
-        f_prev = f(x_prev)
-        f_curr = f(x_curr)
+    c = (a + b) / 2
 
-        if np.abs(f_curr - f_prev) < 1e-14:
-            print("Różnica f(b) - f(a) jest zbyt mała. Metoda zawodzi.")
+    x_prev, x_curr = 0, 0
 
-        x_next = x_curr - f_curr * (x_curr - x_prev) / (f_curr - f_prev)
+    if df(c) * ddf(c) < 0:
+        x_prev, x_curr = b, a
+    if df(c) * ddf(c) > 0:
+        x_prev, x_curr = a, b
 
-        if np.abs(x_next - x_curr) < tolerance:
-            print(f"Zakończono po {i + 1} iteracjach")
-            return x_next
+    i = 0
 
+    while i < iterations:
+        fx_prev = f(x_prev)
+        fx_curr = f(x_curr)
+
+        if np.abs(x_curr - x_prev) < tolerance:
+            break
+
+        x_next = x_curr - fx_curr * (x_curr - x_prev) / (fx_curr - fx_prev)
         x_prev, x_curr = x_curr, x_next
 
+        i += 1
+
+    print(f"Zakończono po {i + 1} iteracjach")
     return x_curr
 
 
@@ -128,8 +138,8 @@ print(f"x2: {x2}")
 
 print()
 
-x1 = sieczna(f1, x_range[0], x_range[1])
-x2 = sieczna(f2, x_range[0], x_range[1])
+x1 = sieczna(f1, df1, ddf1, x_range[0], x_range[1])
+x2 = sieczna(f2, df2, ddf2, x_range[0], x_range[1])
 
 print()
 
