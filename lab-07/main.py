@@ -40,8 +40,7 @@ def bisection(f, a, b, tolerance=1e-6, iterations=0):
             break
 
         if np.abs(f(c)) == 0:
-            print(f"a={a}, b={b} zajęło {i + 1} iteracji")
-            return np.abs(c)
+            break
         elif f(a) * f(c) < 0:
             b = c
         else:
@@ -49,8 +48,7 @@ def bisection(f, a, b, tolerance=1e-6, iterations=0):
 
         i += 1
 
-    print(f"a={a}, b={b} zajęło {i + 1} iteracji")
-
+    print(f"Zakończono po {i + 1} iteracjach")
     return np.abs(c)
 
 
@@ -116,33 +114,45 @@ def sieczna(f, df, ddf, a, b, tolerance=1e-6, iterations=100):
 
 x_range = (0, 2.2)
 
+print("Zadanie 1:")
+
+print("a)")
 x1 = bisection(f1, x_range[0], x_range[1])
-x2 = bisection(f2, x_range[0], x_range[1])
+print(f"x1: {x1}")
 
 print()
 
-print("Zadanie 1:")
-print(f"x1: {x1}")
+print("b)")
+x2 = bisection(f2, x_range[0], x_range[1])
 print(f"x2: {x2}")
 
-print()
-
-x1 = newton_method(f1, df1, ddf1, x_range[0], x_range[1])
-x2 = newton_method(f2, df2, ddf2, x_range[0], x_range[1])
-
+print("====================================")
 print()
 
 print("Zadanie 2:")
+
+print("a)")
+x1 = newton_method(f1, df1, ddf1, x_range[0], x_range[1])
 print(f"x1: {x1}")
-print(f"x2: {x2}")
 
 print()
 
-x1 = sieczna(f1, df1, ddf1, x_range[0], x_range[1])
-x2 = sieczna(f2, df2, ddf2, x_range[0], x_range[1])
+print("b)")
+x2 = newton_method(f2, df2, ddf2, x_range[0], x_range[1])
+print(f"x2: {x2}")
 
+print("====================================")
 print()
 
 print("Zadanie 3:")
+
+print("a)")
+x1 = sieczna(f1, df1, ddf1, x_range[0], x_range[1])
 print(f"x1: {x1}")
+
+print("b)")
+x2 = sieczna(f2, df2, ddf2, x_range[0], x_range[1])
 print(f"x2: {x2}")
+
+print("====================================")
+print()
