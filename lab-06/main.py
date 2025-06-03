@@ -32,7 +32,7 @@ def jacobi_tol(a, b, tolerance):
     x = [[0.0] for _ in range(n)]
     new_x = [[0.0] for _ in range(n)]
 
-    it = 0
+    k = 0
 
     while True:
         for i in range(n):
@@ -45,13 +45,14 @@ def jacobi_tol(a, b, tolerance):
 
         diff = [abs(new_x[i][0] - x[i][0]) for i in range(n)]
         norm = max(diff)
+
         if norm < tolerance:
-            print("Zatrzymanie iteracji przy iteracji:", it + 1)
+            print(f"Zakończono po {k + 1} iteracjach")
             break
 
         x = [row[:] for row in new_x]
 
-        it += 1
+        k += 1
 
     return x
 
@@ -62,7 +63,7 @@ def jacobi_zbieznosc(a, b, tolerance):
     x = [[0.0] for _ in range(n)]
     new_x = [[0.0] for _ in range(n)]
 
-    it = 0
+    k = 0
 
     while True:
         for i in range(n):
@@ -74,6 +75,7 @@ def jacobi_zbieznosc(a, b, tolerance):
             new_x[i][0] = (b[i][0] - sum) / a[i][i]
 
         res = [0.0] * n
+
         for i in range(n):
             sum = 0.0
             for j in range(n):
@@ -84,11 +86,11 @@ def jacobi_zbieznosc(a, b, tolerance):
         diff = max(res)
 
         if diff < tolerance:
-            print("Zatrzymanie iteracji przy iteracji:", it + 1)
+            print(f"Zakończono po {k + 1} iteracjach")
             break
 
         x = [row[:] for row in new_x]
-        it += 1
+        k += 1
 
     return x
 
@@ -118,7 +120,7 @@ def gauss_seidl_tol(a, b, tolerance):
 
     x = [[0.0] for _ in range(n)]
 
-    it = 0
+    k = 0
 
     while True:
         old_x = [row[0] for row in x]
@@ -136,11 +138,12 @@ def gauss_seidl_tol(a, b, tolerance):
 
         diff = [abs(x[i][0] - old_x[i]) for i in range(n)]
         norm = max(diff)
+
         if norm < tolerance:
-            print("Zatrzymanie iteracji przy iteracji:", it + 1)
+            print(f"Zakończono po {k + 1} iteracjach")
             break
 
-        it += 1
+        k += 1
 
     return x
 
@@ -150,7 +153,7 @@ def gauss_seidl_zbieznosc(a, b, tolerance):
 
     x = [[0.0] for _ in range(n)]
 
-    it = 0
+    k = 0
 
     while True:
         for i in range(n):
@@ -165,17 +168,19 @@ def gauss_seidl_zbieznosc(a, b, tolerance):
             x[i][0] = (b[i][0] - sum_prev - sum) / a[i][i]
 
         res = [0.0] * n
+
         for i in range(n):
             s = 0.0
             for j in range(n):
                 s += a[i][j] * x[j][0]
             res[i] = abs(s - b[i][0])
         norm_res = max(res)
+
         if norm_res < tolerance:
-            print("Zatrzymanie iteracji przy iteracji:", it + 1)
+            print(f"Zakończono po {k + 1} iteracjach")
             break
 
-        it += 1
+        k += 1
 
     return x
 
@@ -206,26 +211,38 @@ b1 = [
     [-2.0]
 ]
 
+print("Zadanie 1:")
+print("Jacobi - iteracje:")
 result = jacobi(a1, b1, 100)
 print_matrix(result)
 print()
 
+print("Jacobi - norma:")
 result = jacobi_tol(a1, b1, 1e-9)
 print_matrix(result)
 print()
 
+print("Jacobi - błąd (zbieżność):")
 result = jacobi_zbieznosc(a1, b1, 1e-9)
 print_matrix(result)
 print()
 
+print("====================================")
+print()
+
+print("Zadanie 2:")
+
+print("Gauss - iteracje:")
 result = gauss_seidl(a1, b1, 100)
 print_matrix(result)
 print()
 
+print("Gauss - norma:")
 result = gauss_seidl_tol(a1, b1, 1e-9)
 print_matrix(result)
 print()
 
+print("Gauss - błąd (zbieżność):")
 result = gauss_seidl_zbieznosc(a1, b1, 1e-9)
 print_matrix(result)
 
