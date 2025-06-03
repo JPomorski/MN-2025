@@ -1,5 +1,3 @@
-
-
 def is_matrix_square(matrix):
     row_count = len(matrix)
 
@@ -203,25 +201,11 @@ square_matrix = [
     [1.0, 3.0]
 ]
 
-print_matrix(square_matrix)
-
-det_value = det(square_matrix)
-print(f"Wspolczynnik: {det_value}")
-
-print()
-
 big_square_matrix = [
     [2.0, 4.0, 3.0],
     [1.0, 3.0, 2.0],
     [1.0, 2.0, 3.0]
 ]
-
-print_matrix(big_square_matrix)
-
-det_value = det(big_square_matrix)
-print(f"Wspolczynnik: {det_value}")
-
-print()
 
 przyklad = [
     [15.0, 11.0, 10.0, 15.0],
@@ -230,68 +214,100 @@ przyklad = [
     [0.0, 12.0, 12.0, 11.0]
 ]
 
-print_matrix(przyklad)
+matrices = [square_matrix, big_square_matrix, przyklad]
 
-det_value = det(przyklad)
-print(f"Wspolczynnik: {det_value}")
+for matrix in matrices:
+    print("Macierz:")
+    print_matrix(matrix)
 
+    print()
+
+    det_value = det(matrix)
+    print(f"Wspolczynnik: {det_value}")
+
+    print()
+
+print("====================================")
 print()
 
 print("Zadanie 2:")
-
-transposed = transpose(square_matrix)
-print_matrix(transposed)
-
-print()
 
 matrix = [
     [1.0, 2.0, 3.0],
     [4.0, 5.0, 6.0]
 ]
 
-transposed = transpose(matrix)
-print_matrix(transposed)
+matrices = [square_matrix, matrix]
 
+for matrix in matrices:
+    print("Macierz:")
+    print_matrix(matrix)
+
+    print()
+
+    transposed = transpose(matrix)
+
+    print("Macierz transponowana:")
+    print_matrix(transposed)
+
+    print()
+
+print("====================================")
 print()
 
 print("Zadanie 3:")
 
+matrices = [big_square_matrix, przyklad]
+
+for matrix in matrices:
+    print("Macierz:")
+    print_matrix(matrix)
+
+    print()
+
+    inverse_laplacian = invert_laplacian(matrix)
+    inverse_gauss = invert_gauss_jordan(matrix)
+
+    print("Macierz odwrotna (Laplace):")
+    print_matrix(inverse_laplacian)
+
+    print()
+
+    print("Macierz odwrotna (Gauss):")
+    print_matrix(inverse_gauss)
+
+    print()
+
+print("====================================")
+print()
+
+print("Zadanie 5:")
+
+print("Macierz:")
+print_matrix(przyklad)
+
+print()
+
 inv = invert_gauss_jordan(przyklad)
-if inv:
-    print_matrix(inv)
-    det_value = det(inv)
-    print(det_value)
+
+print("Macierz odwrotna:")
+print_matrix(inv)
 
 print()
 
-aaa = multiply(przyklad, inv)
-print_matrix(aaa)
+det_value = det(inv)
+print(f"Wyznacznik macierzy odwrotnej: {det_value}")
 
 print()
 
-aaa = multiply(inv, przyklad)
-print_matrix(aaa)
+result = multiply(przyklad, inv)
+
+print("Wynik mnożenia A * A^-1:")
+print_matrix(result)
 
 print()
 
-inverse = invert_laplacian(big_square_matrix)
-if inverse:
-    print_matrix(inverse)
+result = multiply(inv, przyklad)
 
-print()
-
-inverse = invert_gauss_jordan(big_square_matrix)
-if inverse:
-    print_matrix(inverse)
-
-print("==================")
-
-inverse = invert_laplacian(przyklad)
-if inverse:
-    print_matrix(inverse)
-
-print()
-
-inverse = invert_gauss_jordan(przyklad)
-if inverse:
-    print_matrix(inverse)
+print("Wynik mnożenia A^-1 * A:")
+print_matrix(result)
