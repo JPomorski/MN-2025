@@ -112,6 +112,31 @@ def sieczna(f, df, ddf, a, b, tolerance=1e-6, iterations=100):
     return x_curr
 
 
+def regula_falsi(f, a, b, tolerance=1e-6, iterations=100):
+    if f(a) * f(b) >= 0:
+        print("Oba punkty są tego samego znaku, nie można zagwarantować miejsca zerowego")
+        return
+
+    i = 0
+    c = a
+
+    while i < iterations:
+        c = b - (f(b) * (b - a)) / (f(b) - f(a))
+
+        if np.abs(f(c)) < tolerance:
+            break
+
+        if f(a) * f(c) < 0:
+            b = c
+        else:
+            a = c
+
+        i += 1
+
+    print(f"Zakończono po {i + 1} iteracjach")
+    return c
+
+
 x_range = (0, 2.2)
 
 print("Zadanie 1:")
@@ -150,8 +175,25 @@ print("a)")
 x1 = sieczna(f1, df1, ddf1, x_range[0], x_range[1])
 print(f"x1: {x1}")
 
+print()
+
 print("b)")
 x2 = sieczna(f2, df2, ddf2, x_range[0], x_range[1])
+print(f"x2: {x2}")
+
+print("====================================")
+print()
+
+print("Zadanie 4:")
+
+print("a)")
+x1 = regula_falsi(f1, x_range[0], x_range[1])
+print(f"x1: {x1}")
+
+print()
+
+print("b)")
+x2 = regula_falsi(f2, x_range[0], x_range[1])
 print(f"x2: {x2}")
 
 print("====================================")
