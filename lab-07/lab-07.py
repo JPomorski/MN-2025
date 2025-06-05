@@ -140,6 +140,7 @@ def regula_falsi(f, a, b, tolerance=1e-6, iterations=100):
 x_range = (0, 2.2)
 
 print("Zadanie 1:")
+print("Metoda bisekcji:")
 
 print("a)")
 x1 = bisection(f1, x_range[0], x_range[1])
@@ -151,10 +152,13 @@ print("b)")
 x2 = bisection(f2, x_range[0], x_range[1])
 print(f"x2: {x2}")
 
+print()
+
 print("====================================")
 print()
 
 print("Zadanie 2:")
+print("Metoda Newtona:")
 
 print("a)")
 x1 = newton_method(f1, df1, ddf1, x_range[0], x_range[1])
@@ -166,10 +170,13 @@ print("b)")
 x2 = newton_method(f2, df2, ddf2, x_range[0], x_range[1])
 print(f"x2: {x2}")
 
+print()
+
 print("====================================")
 print()
 
 print("Zadanie 3:")
+print("Metoda siecznych:")
 
 print("a)")
 x1 = sieczna(f1, df1, ddf1, x_range[0], x_range[1])
@@ -181,10 +188,13 @@ print("b)")
 x2 = sieczna(f2, df2, ddf2, x_range[0], x_range[1])
 print(f"x2: {x2}")
 
+print()
+
 print("====================================")
 print()
 
 print("Zadanie 4:")
+print("Metoda regula falsi:")
 
 print("a)")
 x1 = regula_falsi(f1, x_range[0], x_range[1])
@@ -195,6 +205,3 @@ print()
 print("b)")
 x2 = regula_falsi(f2, x_range[0], x_range[1])
 print(f"x2: {x2}")
-
-print("====================================")
-print()
