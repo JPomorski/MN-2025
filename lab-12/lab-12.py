@@ -28,6 +28,7 @@ def second_derivative_at(coefficients, x):
         return 0
 
     der = [coefficients[i] * (n - i) for i in range(n)]
+
     return derivative_at(der, x)
 
 
