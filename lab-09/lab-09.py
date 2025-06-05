@@ -15,8 +15,10 @@ def gauss(A, B):
             B[j] -= factor * B[i]
 
     x = [0] * size
+
     for i in range(size - 1, -1, -1):
         x[i] = (B[i] - sum(A[i][j] * x[j] for j in range(i + 1, size))) / A[i][i]
+
     return x
 
 
@@ -28,8 +30,9 @@ def linear_approximate(points):
     D = sum(x ** 2 for x, _ in points)
 
     m = n * D - B ** 2
+
     if m == 0:
-        raise ValueError("Dzielenie przez zero — punkty mogą być niewłaściwe lub współliniowe.")
+        raise ValueError("Dzielenie przez zero")
 
     a = (n * A - B * C) / m
     b = (C * D - A * B) / m
@@ -41,17 +44,19 @@ points = [(1.1, 2.1), (1.4, 2.3), (1.8, 2.9), (2.5, 3.2), (2.8, 3.6), (3.0, 4.2)
 
 a, b = linear_approximate(points)
 
-x = [p[0] for p in points]
-y = [p[1] for p in points]
+x_points = [p[0] for p in points]
+y_points = [p[1] for p in points]
 
-print(f"Dopasowana prosta: y = {a:.4f}x + {b:.4f}\r\n")
+print("Zadanie 1:")
+print(f"Zbiór punktów: {points}")
+print(f"Dopasowany wielomian: y = {a:.4f}x + {b:.4f}\r\n")
 
-x_min = min(x)
-x_max = max(x)
+x_min = min(x_points)
+x_max = max(x_points)
 x_line = [x_min, x_max]
 y_line = [a * xi + b for xi in x_line]
 
-plt.scatter(x, y, color='blue', label='Punkty danych')
+plt.scatter(x_points, y_points, color='blue', label='Punkty danych')
 plt.plot(x_line, y_line, color='red', label='Aproksymacja liniowa')
 plt.xlabel('x')
 plt.ylabel('y')
@@ -87,7 +92,8 @@ def exponential_approximate(points):
 points = [(0, 2), (0.5, 2.48), (1, 2.84), (1.5, 3), (2, 2.91)]
 a, b, c = exponential_approximate(points)
 
-
+print("Zadanie 2:")
+print(f"Zbiór punktów: {points}")
 print(f"Dopasowany wielomian: y = {a:.4f}x² + {b:.4f}x + {c:.4f}\r\n")
 
 x_vals = [p[0] for p in points]
@@ -134,17 +140,26 @@ def approximate(points, degree):
 points = [(0, 2), (0.5, 2.48), (1, 2.84), (1.5, 3), (2, 2.91)]
 degree = 2
 
-c, mse = approximate(points, degree)
-print(f"Współczynniki wielomianu: {c}")
-print(f"Błąd średniokwadratowy (MSE): {mse:.4f}\r\n")
+print("Zadanie 3:")
+print(f"Zbiór punktów: {points}\r\n")
 
-points = [(0, 2), (0.5, 2.48), (1, 2.84), (1.5, 3), (2, 2.91)]
-c, mse = approximate(points, 2)
-print(f"Współczynniki wielomianu (Zad 2): {c}")
-print(f"Błąd średniokwadratowy (MSE) (Zad 2): {mse:.4f}\r\n")
+c, mse = approximate(points, degree)
+
+print(f"Współczynniki wielomianu: {c}")
+print(f"Błąd średniokwadratowy (MSE): {mse:e}\r\n")
 
 points = [(1.1, 2.1), (1.4, 2.3), (1.8, 2.9), (2.5, 3.2), (2.8, 3.6), (3.0, 4.2)]
-c, mse = approximate(points, 1)
-print(f"Współczynniki wielomianu (Zad 1): {c}")
-print(f"Błąd średniokwadratowy (MSE) (Zad 1): {mse:.4f}\r\n")
+print(f"Zbiór punktów: {points}\r\n")
 
+c, mse = approximate(points, 1)
+
+print(f"Współczynniki wielomianu (Zad 1): {c}")
+print(f"Błąd średniokwadratowy (MSE) (Zad 1): {mse:e}\r\n")
+
+points = [(0, 2), (0.5, 2.48), (1, 2.84), (1.5, 3), (2, 2.91)]
+print(f"Zbiór punktów: {points}\r\n")
+
+c, mse = approximate(points, 2)
+
+print(f"Współczynniki wielomianu (Zad 2): {c}")
+print(f"Błąd średniokwadratowy (MSE) (Zad 2): {mse:e}\r\n")
