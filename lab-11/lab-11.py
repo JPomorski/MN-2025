@@ -21,6 +21,7 @@ def rectangle_method(f, a, b, n):
         xi = a + i * h
         midpoint = xi + h / 2
         sum += f(midpoint)
+
     return h * sum
 
 
@@ -31,6 +32,7 @@ def trapezoid_method(f, a, b, n):
     for i in range(1, n):
         xi = a + i * h
         sum += 2 * f(xi)
+
     return (h / 2) * sum
 
 
@@ -40,6 +42,7 @@ def simpson_method(f, a, b, n):
 
     for i in range(1, n):
         xi = a + i * h
+
         if i % 2 == 0:
             sum += 2 * f(xi)
         else:
@@ -59,6 +62,9 @@ a_3, b_3 = math.e, math.e ** 2
 functions = [rectangle_method, trapezoid_method, simpson_method]
 i_doks = [1/3, 1, 1]
 
+print("Przykład a):")
+print()
+
 result_a = rectangle_method(f_a, a_1, b_1, 100)
 result_b = trapezoid_method(f_a, a_1, b_1, 100)
 result_c = simpson_method(f_a, a_1, b_1, 100)
@@ -77,6 +83,12 @@ print("Błąd względny:")
 print("Prostokąty:", err_a)
 print("Trapezy:", err_b)
 print("Simpson:", err_c)
+print()
+
+print("====================================")
+print()
+
+print("Przykład b):")
 print()
 
 result_a = rectangle_method(f_b, a_2, b_2, 100)
@@ -99,6 +111,12 @@ print("Trapezy:", err_b)
 print("Simpson:", err_c)
 print()
 
+print("====================================")
+print()
+
+print("Przykład c):")
+print()
+
 result_a = rectangle_method(f_c, a_3, b_3, 100)
 result_b = trapezoid_method(f_c, a_3, b_3, 100)
 result_c = simpson_method(f_c, a_3, b_3, 100)
@@ -118,26 +136,3 @@ print("Prostokąty:", err_a)
 print("Trapezy:", err_b)
 print("Simpson:", err_c)
 print()
-
-# for f in functions:
-#     result_a = f(f_a, a_1, b_1, 100)
-#     result_b = f(f_a, a_1, b_1, 100)
-#     result_c = f(f_a, a_1, b_1, 100)
-#
-#     print("Wyniki:")
-#     print("Prostokąty:", result_a)
-#     print("Trapezy:", result_b)
-#     print("Simpson:", result_c)
-#
-#     print()
-#
-#     err_a = calculate_error(result_a, i_doks[0])
-#     err_b = calculate_error(result_b, i_doks[0])
-#     err_c = calculate_error(result_c, i_doks[0])
-#
-#     print("Błąd względny:")
-#     print("Prostokąty:", err_a)
-#     print("Trapezy:", err_b)
-#     print("Simpson:", err_c)
-#
-#     print()
