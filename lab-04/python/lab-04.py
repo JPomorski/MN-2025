@@ -223,7 +223,7 @@ for matrix in matrices:
     print()
 
     det_value = det(matrix)
-    print(f"Wspolczynnik: {det_value}")
+    print(f"Wyznacznik: {det_value}")
 
     print()
 
