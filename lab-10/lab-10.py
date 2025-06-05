@@ -115,7 +115,6 @@ print(f"b) {dok_b}")
 print(f"c) {dok_c}")
 print()
 
-
 print("Zadanie 1:")
 print("Metoda Newtona:")
 calc(newton_method)
@@ -146,4 +145,3 @@ print("Zadanie 4:")
 print("Wielomian Lagrange'a:")
 result = lagrange(3.5, x_nodes, y_nodes, 1e-4, len(nodes))
 print(result)
-
