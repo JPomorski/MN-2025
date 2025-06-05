@@ -43,29 +43,27 @@ def newton_coefficients(x, y):
 
 def newton_interpolate(x, y, x_point):
     n = len(x)
-    p = y.copy()
 
-    for j in range(1, n):
-        for i in range(n - 1, j - 1, -1):
-            p[i] = (p[i] - p[i - 1]) / (x[i] - x[i - j])
-
+    p = newton_coefficients(x, y)
     result = p[-1]
+
     for i in range(n - 2, -1, -1):
         result = result * (x_point - x[i]) + p[i]
 
     return result
 
 
-x = 5
+x_value = 5
 
 mc_start = perf_counter()
-mclaren = exp_maclaurin(x, 25)
+mclaren = exp_maclaurin(x_value, 25)
 mc_elapsed = perf_counter() - mc_start
 
 np_start = perf_counter()
-numpy = np.exp(x)
+numpy = np.exp(x_value)
 np_elapsed = perf_counter() - np_start
 
+print("Zadanie 1:")
 print(f"Wynik (McLaren):    {mclaren}")
 print(f"Wynik (NumPy):      {numpy}\r\n")
 
@@ -74,16 +72,20 @@ print(f"Błąd bezwzględny:   {abs(mclaren - numpy)}\r\n")
 print(f"Czas (McLaren):     {mc_elapsed:f}s")
 print(f"Czas (NumPy):       {np_elapsed:f}s\r\n")
 
-x = np.pi / 3
+print("====================================")
+print()
+
+x_value = np.pi / 3
 
 mc_start = perf_counter()
-mclaren = sin_maclaurin(x, 25)
+mclaren = sin_maclaurin(x_value, 25)
 mc_elapsed = perf_counter() - mc_start
 
 np_start = perf_counter()
-numpy = np.sin(x)
+numpy = np.sin(x_value)
 np_elapsed = perf_counter() - np_start
 
+print("Zadanie 2:")
 print(f"Wynik (McLaren):    {mclaren}")
 print(f"Wynik (NumPy):      {numpy}\r\n")
 
@@ -91,18 +93,26 @@ print(f"Błąd bezwzględny:   {abs(mclaren - numpy)}\r\n")
 
 print(f"Czas (McLaren):     {mc_elapsed:f}s")
 print(f"Czas (NumPy):       {np_elapsed:f}s\r\n")
+
+print("====================================")
+print()
 
 x_vals = [4, 2, 0, 3]
 y_vals = [63, 11, 7, 28]
 
 a = newton_coefficients(x_vals, y_vals)
-print(f"Wynik (interpolacja Newtona):   {a}")
+
+print("Zadanie 3:")
+print(f"Współczynniki wielomianu (interpolacja Newtona): {a}\r\n")
+
+print("====================================")
+print()
 
 x_plot = np.linspace(min(x_vals) - 1, max(x_vals) + 1, 100)
-y = [newton_interpolate(x_vals, y_vals, x) for x in x_plot]
+y_plot = [newton_interpolate(x_vals, y_vals, x) for x in x_plot]
 
 plt.figure(figsize=(8, 5))
-plt.plot(x_plot, y, label="Wielomian Newtona", color="blue")
+plt.plot(x_plot, y_plot, label="Wielomian Newtona", color="blue")
 plt.scatter(x_vals, y_vals, color="red", label="Punkty danych", zorder=5)
 plt.title("Interpolacja Newtona")
 plt.xlabel("x")
@@ -115,9 +125,9 @@ plt.show()
 x_vals = [4, 2, 0, 3]
 y_vals = [63, 11, 7, 28]
 
-x = 1
+x_value = 1
 
-a = newton_interpolate(x_vals, y_vals, x)
-print(f"Wynik (Newton z Hornerem):      {a}")
+a = newton_interpolate(x_vals, y_vals, x_value)
 
-
+print("Zadanie 4:")
+print(f"Wartość wielomianu w punkcie x = {x_value} (Newton z Hornerem): {a}")
