@@ -26,7 +26,7 @@ def jacobi(a, b, limit):
     return x
 
 
-def jacobi_tol(a, b, tolerance):
+def jacobi_norm(a, b, tolerance):
     n = get_square_matrix_size(a)
 
     x = [[0.0] for _ in range(n)]
@@ -115,7 +115,7 @@ def gauss_seidl(a, b, limit):
     return x
 
 
-def gauss_seidl_tol(a, b, tolerance):
+def gauss_seidl_norm(a, b, tolerance):
     n = get_square_matrix_size(a)
 
     x = [[0.0] for _ in range(n)]
@@ -218,7 +218,7 @@ print_matrix(result)
 print()
 
 print("Jacobi - norma:")
-result = jacobi_tol(a1, b1, 1e-9)
+result = jacobi_norm(a1, b1, 1e-9)
 print_matrix(result)
 print()
 
@@ -238,11 +238,10 @@ print_matrix(result)
 print()
 
 print("Gauss - norma:")
-result = gauss_seidl_tol(a1, b1, 1e-9)
+result = gauss_seidl_norm(a1, b1, 1e-9)
 print_matrix(result)
 print()
 
 print("Gauss - błąd (zbieżność):")
 result = gauss_seidl_zbieznosc(a1, b1, 1e-9)
 print_matrix(result)
-
