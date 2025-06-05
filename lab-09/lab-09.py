@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 
 def gauss(A, B):
     size = len(B)
+
     for i in range(size):
         max_row = max(range(i, size), key=lambda r: abs(A[r][i]))
         A[i], A[max_row] = A[max_row], A[i]
@@ -24,6 +25,7 @@ def gauss(A, B):
 
 def linear_approximate(points):
     n = len(points)
+
     A = sum(x * y for x, y in points)
     B = sum(x for x, _ in points)
     C = sum(y for _, y in points)
@@ -53,6 +55,7 @@ print(f"Dopasowany wielomian: y = {a:.4f}x + {b:.4f}\r\n")
 
 x_min = min(x_points)
 x_max = max(x_points)
+
 x_line = [x_min, x_max]
 y_line = [a * xi + b for xi in x_line]
 
