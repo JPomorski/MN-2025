@@ -217,32 +217,32 @@ def doolittle(matrix):
 
             vec_u[i][j] = matrix[i][j] - sum_u
             vec_l[j][i] = (matrix[j][i] - sum_l) / vec_u[i][i]
-            
+
     return vec_l, vec_u
 
 
 def solve_linear_equation(l_matrix, u_matrix, b):
     n = get_square_matrix_size(l_matrix)
     y = [[0.0] for _ in range(n)]
-    
+
     for i in range(n):
         sum = 0.0
-        
+
         for j in range(i):
             sum += l_matrix[i][j] * y[j][0]
 
         y[i][0] = sum * -1.0 + b[i][0]
-        
+
     x = [[0.0] for _ in range(n)]
-    
+
     for i in range(n - 1, -1, -1):
         sum = 0.0
-        
+
         for j in range(n - 1, i, -1):
             sum += u_matrix[i][j] * x[j][0]
 
         x[i][0] = (sum * -1.0 + y[i][0]) / u_matrix[i][i]
-        
+
     return x
 
 
@@ -322,10 +322,10 @@ def solve_gauss(a, b):
 
 def measure_zad_01(a, b):
     start = time.perf_counter()
-    
+
     inv_lap = invert_laplacian(a)
     result = multiply(inv_lap, b)
-    
+
     elapsed = time.perf_counter() - start
 
     print("Macierz wejściowa:")
@@ -340,14 +340,14 @@ def measure_zad_01(a, b):
     print_matrix(result)
     print()
 
-    print(f"Elapsed (Laplace): {elapsed:f}")
+    print(f"Czas wykonania (Laplace): {elapsed:f}s")
     print()
-    
+
     start = time.perf_counter()
-    
+
     inv_gauss = invert_gauss_jordan(a)
     result = multiply(inv_gauss, b)
-    
+
     elapsed = time.perf_counter() - start
 
     print("Macierz wejściowa:")
@@ -362,70 +362,70 @@ def measure_zad_01(a, b):
     print_matrix(result)
     print()
 
-    print(f"Elapsed (Gauss): {elapsed:f}")
+    print(f"Czas wykonania (Gauss): {elapsed:f}s")
     print()
-    
-    
+
+
 def measure_zad_02(a, b):
     start = time.perf_counter()
-    
-    l, u = doolittle(a)
-    result = solve_linear_equation(l, u, b)
-    
+
+    l_matrix, u_matrix = doolittle(a)
+    result = solve_linear_equation(l_matrix, u_matrix, b)
+
     elapsed = time.perf_counter() - start
-    
-    lu = multiply(l, u)
+
+    lu_matrix = multiply(l_matrix, u_matrix)
 
     print("Macierz L:")
-    print_matrix(l)
-    print(" ")
+    print_matrix(l_matrix)
+    print()
 
     print("Macierz U:")
-    print_matrix(u)
-    print(" ")
+    print_matrix(u_matrix)
+    print()
 
-    print("Macierz L * U:")
-    print_matrix(lu)
-    print(" ")
+    print("Macierz LU:")
+    print_matrix(lu_matrix)
+    print()
 
     print("Macierz wejściowa:")
     print_matrix(a)
-    print(" ")
+    print()
 
     print("Wynik:")
     print_matrix(result)
-    print(" ")
+    print()
 
-    print(f"Elapsed (LU): {elapsed:f}")
-    print(" ")
+    print(f"Czas wykonania (LU): {elapsed:f}s")
+    print()
 
 
 def measure_zad_03(a, b):
     start = time.perf_counter()
 
-    l = cholesky(a)
-    result = solve_cholesky(l, b)
+    l_matrix = cholesky(a)
+    result = solve_cholesky(l_matrix, b)
 
     elapsed = time.perf_counter() - start
 
     print("Macierz wejściowa:")
     print_matrix(a)
-    print(" ")
+    print()
 
     print("Macierz L:")
-    print_matrix(l)
-    print(" ")
+    print_matrix(l_matrix)
+    print()
 
     print("Macierz LT:")
-    print_matrix(transpose(l))
-    print(" ")
+    print_matrix(transpose(l_matrix))
+    print()
 
     print("Wynik:")
     print_matrix(result)
-    print(" ")
+    print()
 
-    print(f"Elapsed (Cholesky): {elapsed:f}")
-    print(" ")
+    print(f"Czas wykonania (Cholesky): {elapsed:f}s")
+    print()
 
 
 def measure_zad_04(a, b):
@@ -437,15 +437,15 @@ def measure_zad_04(a, b):
 
     print("Macierz wejściowa:")
     print_matrix(a)
-    print(" ")
+    print()
 
     print("Wynik:")
     print_matrix(result)
-    print(" ")
+    print()
 
-    print(f"Elapsed (Gauss): {elapsed:f}")
-    print(" ")
-    
+    print(f"Czas wykonania (Gauss): {elapsed:f}s")
+    print()
+
 
 a1 = [
     [1.0, 2.0, 1.0],
